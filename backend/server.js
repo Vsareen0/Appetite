@@ -8,6 +8,12 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 // Load environment variables
 require('dotenv').config();
+// Bring in routes
+const blogRoute = require('./routes/blog');
+
+
+// Setup Routes
+app.use('/api', blogRoute);
 
 app.use(
     // Middlewares
@@ -23,11 +29,6 @@ app.use(
 if(process.env.NODE_ENV === 'development') {
     app.use(cors({origin: `${process.env.CLIENT_URL}`}));
 }
-
-// Handle Request 
-app.get("/api", (req,res) => {
-    res.json({time: Date().toString()});
-});
 
 // Establish Database connection
 options = {
