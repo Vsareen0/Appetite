@@ -8,12 +8,6 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 // Load environment variables
 require('dotenv').config();
-// Bring in routes
-const blogRoute = require('./routes/blog');
-
-
-// Setup Routes
-app.use('/api', blogRoute);
 
 app.use(
     // Middlewares
@@ -41,6 +35,15 @@ options = {
 mongoose.connect(process.env.MONGODB_URL, options)
     .then(() => console.log(`Connection to database established successfully !`))
     .catch(dbErr => console.log(`Unable to establish a database connection : ${dbErr.message}`))
+
+
+// Bring in routes
+const blogRoute = require('./routes/blog');
+const authRoute = require('./routes/auth');
+
+// Setup Routes
+app.use('/api', blogRoute);
+app.use('/api', authRoute);
 
 
 const PORT = process.env.PORT || 8000;
