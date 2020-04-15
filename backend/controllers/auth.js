@@ -18,7 +18,7 @@ exports.signup = (req, res) => {
     newUser.save((err, success) => {
       if (err) return res.status(400).json({ error: err });
       // res.json({ user: success });
-        res.json({ message: "Signup Success ! Please sign in" });
+      res.json({ message: "Signup Success ! Please sign in" });
     });
   });
 };
@@ -47,7 +47,7 @@ exports.signin = (req, res) => {
     res.cookie("token", token, { expiresIn: "1 d" });
 
     const { _id, username, name, email, role } = user;
-    
+
     return res.json({
       token,
       user: { _id, username, name, email, role },
@@ -55,14 +55,46 @@ exports.signin = (req, res) => {
   });
 };
 
-
 exports.signout = (req, res) => {
-    res.clearCookie("token");
-    res.json({
-        message: 'Signout success'
-    })
+  res.clearCookie("token");
+  res.json({
+    message: "Signout success",
+  });
 };
 
 exports.requireSignIn = expressJwt({
-    secret: process.env.JWT_SECRET
-})
+  secret: process.env.JWT_SECRET,
+});
+
+exports.authMiddleware = (req, res, next) => {
+  const authUserId = req.user._id;
+  User.findById({ _id: authUserId }).exec((err, user) => {
+    if (err || !user) {
+      return res.status(400).json({
+        error: "User not found.",
+      });
+    }
+    req.profile = user;
+    next();
+  });
+};
+
+exports.adminMiddleware = (req, res, next) => {
+  const adminUserId = req.user._id;
+  User.findById({ _id: adminUserId }).exec((err, user) => {
+    if (err || !user) {
+      return res.status(400).json({
+        error: "User not found.",
+      });
+    }
+
+    if(user.role !== 1){
+      return res.status(400).json({
+        error: "Admin resource. Access Denied",
+      });
+    }
+
+    req.profile = user;
+    next();
+  });
+};
