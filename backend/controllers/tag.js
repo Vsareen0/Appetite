@@ -41,7 +41,7 @@ exports.read = (req, res) => {
 exports.remove = (req, res) => {
     const slug = req.params.slug.toLowerCase();
 
-    tag.findOneAndRemove({slug}).exec((err, tag) => {
+    Tag.findOneAndRemove({slug}).exec((err, tag) => {
         if(err) {
             return res.status(400).json({error: errorHandler(err)});
         }
