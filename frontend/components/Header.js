@@ -14,8 +14,6 @@ import {
   NavLink,
 } from "reactstrap";
 
-import ".././node_modules/nprogress/nprogress.css";
-
 Router.onRouteChangeStart = (url) => NProgress.start();
 Router.onRouteChangeComplete = (url) => NProgress.done();
 Router.onRouteChangeError = (url) => NProgress.done();

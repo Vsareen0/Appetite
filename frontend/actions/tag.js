@@ -1,38 +1,38 @@
 import fetch from "isomorphic-fetch";
 import { API } from "../config";
 
-export const create = (category, token) => {
-  return fetch(`${API}/category`, {
+export const create = (tag, token) => {
+  return fetch(`${API}/tag`, {
     method: "POST",
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     },
-    body: JSON.stringify(category),
+    body: JSON.stringify(tag),
   })
     .then((response) => response.json())
     .catch((err) => err);
 };
 
-export const getCategories = () => {
-  return fetch(`${API}/categories`, {
+export const getTags = () => {
+  return fetch(`${API}/tags`, {
     method: "GET",
   })
     .then((response) => response.json())
     .catch((err) => err);
 };
 
-export const singleCategory = (slug) => {
-  return fetch(`${API}/category/${slug}`, {
+export const singleTag = (slug) => {
+  return fetch(`${API}/tag/${slug}`, {
     method: "GET"
   })
     .then((response) => response.json())
     .catch((err) => err);
 };
 
-export const removeCategory = (slug, token) => {
-  return fetch(`${API}/category/${slug}`, {
+export const removeTag = (slug, token) => {
+  return fetch(`${API}/tag/${slug}`, {
     method: "DELETE",
     headers: {
       Accept: "application/json",

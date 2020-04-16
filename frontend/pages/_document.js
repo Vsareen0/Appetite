@@ -11,8 +11,7 @@ class MyDocument extends Document {
             content="width=device-width, initial-scale=1.0"
           />
           <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" />
-          {/* <link href="https://cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet" /> */}
-          <link href="../static/css/style.css" rel="stylesheet" />
+          <link href="https://cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet" />
         </Head>
         <body>
           <Main />
