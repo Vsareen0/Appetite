@@ -41,12 +41,15 @@ mongoose.connect(process.env.MONGODB_URL, options)
 const blogRoute = require('./routes/blog');
 const authRoute = require('./routes/auth');
 const userRoute = require('./routes/user');
+const categoryRoute = require('./routes/category');
+const tagRoute = require('./routes/tag');
 
 // Setup Routes
 app.use('/api', blogRoute);
 app.use('/api', authRoute);
 app.use('/api', userRoute);
-
+app.use('/api', categoryRoute);
+app.use('/api', tagRoute);
 
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => {
