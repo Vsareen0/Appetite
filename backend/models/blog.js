@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const ObectId = mongoose.Schema;
+const { ObjectId } = mongoose.Schema;
 
 var blogSchema = new mongoose.Schema(
   {
@@ -35,14 +35,14 @@ var blogSchema = new mongoose.Schema(
       data: Buffer,
       contentType: String,
     },
-    categories: [{ type: ObectId, ref: "Category", required: true }],
-    tags: [{ type: ObectId, ref: "Tag", required: true }],
+    categories: [{ type: ObjectId, ref: "Category", required: true }],
+    tags: [{ type: ObjectId, ref: "Tag", required: true }],
     postedBy: {
-      type: ObectId,
+      type: ObjectId,
       ref: "User",
-    },
+    }
   },
   { timestamps: true }
 );
 
-module.exports = model("Blog", blogSchema);
+module.exports = mongoose.model("Blog", blogSchema);
