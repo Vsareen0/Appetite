@@ -15,7 +15,7 @@ class MyDocument extends Document {
             rel="stylesheet"
           />
           {/* <link href="https://cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet" /> */}
-          <link href="../static/css/style.css" rel="stylesheet" />
+          <link href="/static/css/style.css" rel="stylesheet" />
         </Head>
         <body>
           <Main />

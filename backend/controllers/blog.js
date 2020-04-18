@@ -18,21 +18,21 @@ exports.create = (req, res) => {
 
     const { title, body, categories, tags } = fields;
 
-    if (!title && !title.length) {
-      return res.status(400).json({ error: "title is required" });
+    if ( !title || title.length < 3) {
+      return res.status(400).json({ error: "title is required to be of minimum 3 characters" });
     }
 
-    if (!body && body.length < 200) {
+    if (!body || body.length < 200) {
       return res.status(400).json({ error: "Content is too short" });
     }
 
-    if (!categories && categories.length == 0) {
+    if (!categories || categories.length == 0) {
       return res
         .status(400)
         .json({ error: "At least one category is required" });
     }
 
-    if (!tags && tags.length == 0) {
+    if (!tags || tags.length == 0) {
       return res.status(400).json({ error: "At least one tag is required" });
     }
 
@@ -103,14 +103,14 @@ exports.listAllBlogsCategoriesTags = (req, res) => {
   let tags;
 
   Blog.find({})
-    .populate("categroies", "_id name slug")
+    .populate("categories", "_id name slug")
     .populate("tags", "_id name slug")
     .populate("postedBy", "_id name username profile")
     .sort({ createdAt: -1 })
     .skip(skip)
     .limit(limit)
     .select(
-      "_id title slug excerpt categories tags postedBy createdBy updatedBy"
+      "_id title slug excerpt categories tags postedBy createdAt updatedAt"
     )
     .exec((err, data) => {
       if (err) return res.status(400).json({ error: errorHandler(err) });
@@ -197,4 +197,17 @@ exports.update = (req, res) => {
       });
     });
   });
+};
+
+exports.photo = (req, res) => {
+  const slug = req.params.slug.toLowerCase();
+  Blog.findOne({slug})
+    .select('photo')
+    .exec((err, blog) =>  {
+      if(err || !blog) {
+        return res.status(400).json({error: errorHandler(err)});
+      }
+      res.set('Content-Type', blog.photo.contentType);
+      res.send(blog.photo.data);
+    });
 };

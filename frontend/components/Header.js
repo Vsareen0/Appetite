@@ -14,7 +14,7 @@ import {
   NavLink,
 } from "reactstrap";
 
-import '../node_modules/nprogress/nprogress.css'
+import "../node_modules/nprogress/nprogress.css";
 
 Router.onRouteChangeStart = (url) => NProgress.start();
 Router.onRouteChangeComplete = (url) => NProgress.done();
@@ -34,6 +34,11 @@ const Header = () => {
         <NavbarToggler onClick={toggle} />
         <Collapse isOpen={isOpen} navbar>
           <Nav className="ml-auto" navbar>
+            <NavItem>
+              <Link href="/blogs">
+                <NavLink>Blogs</NavLink>
+              </Link>
+            </NavItem>
             {!isAuth() && (
               <>
                 <NavItem>
