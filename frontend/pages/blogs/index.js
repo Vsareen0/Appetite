@@ -1,12 +1,37 @@
 import Head from "next/head";
 import Link from "next/link";
 import Layout from "../../components/Layout";
-import { useState } from "react";
 import { listBlogsWithCategoriesAndTags } from "../../actions/blog";
-import { API } from "../../config";
+import { DOMAIN, APP_NAME, FB_APP_ID } from "../../config";
+import { useRouter } from 'next/router';
 import Card from "../../components/blog/Card";
 
 const Blogs = ({ blogs, categories, tags, size }) => {
+  
+  const router = useRouter();
+
+  const head = () => (
+    <Head>
+      <title>Programming Blogs | {APP_NAME}</title>
+      <meta
+        name="description"
+        content="Programming blogs and tutorials on react node javascript api and web development"
+      />
+      <link rel="canonical" href={`${DOMAIN}${router.pathname}`} />
+      <meta property="og:title" content={`Latest web development tutorials | ${APP_NAME}`} />
+      <meta property="og:description" content="Programming blogs and tutorials on react node javascript api and web development" />
+
+      <meta property="og:type" content="website" />
+      <meta property="og:url" content={`${DOMAIN}${router.pathname}`} />
+      <meta property="og:site_name" content={`${APP_NAME}`} />
+
+      <meta property="og:image" content={`${DOMAIN}/static/images/appetite.jfif`} />
+      <meta property="og:image:secure_url" content={`${DOMAIN}/static/images/appetite.jfif`} />
+      <meta property="og:image:type" content="image/jfif" />
+      <meta property="fb:app_id" content={`${FB_APP_ID}`} />
+    </Head>
+  );
+
   const showAllCategories = () => {
     return categories.map((c, i) => (
       <Link href={`/categories/${c.slug}`} key={i}>
@@ -36,6 +61,7 @@ const Blogs = ({ blogs, categories, tags, size }) => {
 
   return (
     <>
+      {head()}
       <Layout>
         <main>
           <div className="container-fluid">
@@ -74,7 +100,7 @@ Blogs.getInitialProps = () => {
         blogs: data.blogs,
         categories: data.categories,
         tags: data.tags,
-        size: data.size
+        size: data.size,
       };
     }
   });
