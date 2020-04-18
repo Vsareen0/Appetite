@@ -6,7 +6,7 @@ const slugify = require("slugify");
 const stripHtml = require("string-strip-html");
 const _ = require("lodash");
 const fs = require("fs");
-const { smartTrim } = require('../helpers/blog');
+const { smartTrim } = require("../helpers/blog");
 const { errorHandler } = require("../helpers/dbErrorHandler");
 require("dotenv").config();
 
@@ -39,7 +39,7 @@ exports.create = (req, res) => {
     let blog = new Blog();
     blog.title = title;
     blog.body = body;
-    blog.excerpt = smartTrim(body, 320, ' ', ' ...');
+    blog.excerpt = smartTrim(body, 320, " ", " ...");
     blog.slug = slugify(title).toLowerCase();
     blog.mtitle = `${title} | ${process.env.APP_NAME}`;
     blog.mdesc = stripHtml(body.substring(0, 160));
@@ -75,6 +75,125 @@ exports.create = (req, res) => {
           if (err) return res.status(400).json({ error: errorHandler(err) });
           res.json(result);
         });
+      });
+    });
+  });
+};
+
+exports.list = (req, res) => {
+  Blog.find({})
+    .populate("categroies", "_id name slug")
+    .populate("tags", "_id name slug")
+    .populate("postedBy", "_id name username")
+    .select(
+      "_id title slug excerpt categories tags postedBy createdBy updatedBy"
+    )
+    .exec((err, data) => {
+      if (err) return res.status(400).json({ error: errorHandler(err) });
+      res.json(data);
+    });
+};
+
+exports.listAllBlogsCategoriesTags = (req, res) => {
+  let limit = req.body.limit ? parseInt(req.body.limit) : 10;
+  let skip = req.body.skip ? parseInt(req.body.skip) : 0;
+
+  let blogs;
+  let categories;
+  let tags;
+
+  Blog.find({})
+    .populate("categroies", "_id name slug")
+    .populate("tags", "_id name slug")
+    .populate("postedBy", "_id name username profile")
+    .sort({ createdAt: -1 })
+    .skip(skip)
+    .limit(limit)
+    .select(
+      "_id title slug excerpt categories tags postedBy createdBy updatedBy"
+    )
+    .exec((err, data) => {
+      if (err) return res.status(400).json({ error: errorHandler(err) });
+      blogs = data;
+
+      Category.find({}).exec((err, data) => {
+        if (err) return res.status(400).json({ error: errorHandler(err) });
+        categories = data;
+
+        Tag.find({}).exec((err, data) => {
+          if (err) return res.status(400).json({ error: errorHandler(err) });
+          tags = data;
+
+          res.json({ blogs, categories, tags, size: blogs.length });
+        });
+      });
+    });
+};
+
+exports.read = (req, res) => {
+  const slug = req.params.slug.toLowerCase();
+  Blog.findOne({ slug })
+    .populate("categroies", "_id name slug")
+    .populate("tags", "_id name slug")
+    .populate("postedBy", "_id name username profile")
+    .select(
+      "_id title slug body mtitle mdesc categories tags postedBy createdBy updatedBy"
+    )
+    .exec((err, data) => {
+      if (err) return res.status(400).json({ error: errorHandler(err) });
+      res.json(data);
+    });
+};
+
+exports.remove = (req, res) => {
+  const slug = req.params.slug.toLowerCase();
+  Blog.findOneAndRemove({ slug }).exec((err, data) => {
+    if (err) return res.status(400).json({ error: errorHandler(err) });
+    res.json({ message: "Blog deleted successfully" });
+  });
+};
+
+exports.update = (req, res) => {
+  const slug = req.params.slug.toLowerCase();
+  Blog.findOne({ slug }).exec((err, oldBlog) => {
+    if (err) return res.status(400).json({ error: errorHandler(err) });
+    let form = new formidable.IncomingForm();
+    form.keepExtensions = true;
+    form.parse(req, (err, fields, files) => {
+      if (err) return res.status(400).json({ error: "Image could not upload" });
+
+      let slugBeforeMerge = oldBlog.slug;
+      oldBlog = _.merge(oldBlog, fields);
+      oldBlog.slug = slugBeforeMerge;
+
+      const { body, categories, tags } = fields;
+
+      if (body) {
+        oldBlog.excerpt = smartTrim(body, 320, " ", " ...");
+        oldBlog.mdesc = stripHtml(body.substring(0, 160));
+      }
+
+      if (categories) {
+        oldBlog.categories = categories.split(",");
+      }
+
+      if (tags) {
+        oldBlog.tags = tags.split(",");
+      }
+
+      if (files.photo) {
+        if (files.photo.size > 10000000) {
+          return res
+            .status(400)
+            .json({ error: "Image should be less than 1mb in size" });
+        }
+        oldBlog.photo.data = fs.readFileSync(files.photo.path);
+        oldBlog.photo.contentType = files.photo.type;
+      }
+
+      oldBlog.save((err, result) => {
+        if (err) return res.status(400).json({ error: errorHandler(err) });
+        res.json(result);
       });
     });
   });
