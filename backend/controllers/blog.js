@@ -18,8 +18,10 @@ exports.create = (req, res) => {
 
     const { title, body, categories, tags } = fields;
 
-    if ( !title || title.length < 3) {
-      return res.status(400).json({ error: "title is required to be of minimum 3 characters" });
+    if (!title || title.length < 3) {
+      return res
+        .status(400)
+        .json({ error: "title is required to be of minimum 3 characters" });
     }
 
     if (!body || body.length < 200) {
@@ -95,8 +97,10 @@ exports.list = (req, res) => {
 };
 
 exports.listAllBlogsCategoriesTags = (req, res) => {
-  let limit = req.body.limit ? parseInt(req.body.limit) : 10;
+  let limit = req.body.limit != "undefined" ? parseInt(req.body.limit) : 5;
   let skip = req.body.skip ? parseInt(req.body.skip) : 0;
+
+  // console.log(limit, skip);
 
   let blogs;
   let categories;
@@ -133,7 +137,7 @@ exports.listAllBlogsCategoriesTags = (req, res) => {
 exports.read = (req, res) => {
   const slug = req.params.slug.toLowerCase();
   Blog.findOne({ slug })
-    .populate("categroies", "_id name slug")
+    .populate("categories", "_id name slug")
     .populate("tags", "_id name slug")
     .populate("postedBy", "_id name username profile")
     .select(
@@ -201,13 +205,27 @@ exports.update = (req, res) => {
 
 exports.photo = (req, res) => {
   const slug = req.params.slug.toLowerCase();
-  Blog.findOne({slug})
-    .select('photo')
-    .exec((err, blog) =>  {
-      if(err || !blog) {
-        return res.status(400).json({error: errorHandler(err)});
+  Blog.findOne({ slug })
+    .select("photo")
+    .exec((err, blog) => {
+      if (err || !blog) {
+        return res.status(400).json({ error: errorHandler(err) });
       }
-      res.set('Content-Type', blog.photo.contentType);
+      res.set("Content-Type", blog.photo.contentType);
       res.send(blog.photo.data);
+    });
+};
+
+exports.listRelated = (req, res) => {
+  let limit = req.body.limit ? parseInt(req.body.limit) : 3;
+  const { _id, categories } = req.body;
+
+  Blog.find({ _id: { $ne: _id }, categories: { $in: categories } })
+    .limit(limit)
+    .populate("postedBy", "_id name profile")
+    .select("title slug excerpt postedBy createdAt updatedAt")
+    .exec((err, blogs) => {
+      if (err) return res.status(400).json({ error: "Blogs not found" });
+      res.json(blogs);
     });
 };
