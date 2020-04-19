@@ -1,31 +1,42 @@
 import Link from "next/link";
+import Head from "next/head";
 import renderHTML from "react-render-html";
 import Layout from "../../components/Layout";
-import { singleBlog } from "../../actions/blog";
-import { DOMAIN, APP_NAME, FB_APP_ID } from "../../config";
+import { singleBlog, listRelated } from "../../actions/blog";
+import { API, DOMAIN, APP_NAME, FB_APP_ID } from "../../config";
 import moment from "moment";
-import { API } from "../../config";
+import { useEffect, useState } from "react";
+import SmallCard from '../../components/blog/SmallCard';
 
-const SingleBlog = ({ blog }) => {
+const SingleBlog = ({ blog, query }) => {
+  const [related, setRelated] = useState([]);
+  const loadRelated = () => {
+    listRelated({ blog }).then((data) => {
+      if (data.error) {
+        console.log(data.error);
+      } else {
+        console.log(data);
+        setRelated(data);
+      }
+    });
+  };
+
+  useEffect(() => {
+    loadRelated();
+  }, []);
+
   const head = () => (
     <Head>
-      <title>{blog.title} | {APP_NAME}</title>
-      <meta
-        name="description"
-        content={blog.mdesc}
-      />
-      <link rel="canonical" href={`${DOMAIN}${router.pathname}`} />
-      <meta
-        property="og:title"
-        content={`${blog.title} | ${APP_NAME}`}
-      />
-      <meta
-        property="og:description"
-        content={blog.mdesc}
-      />
+      <title>
+        {blog.title} | {APP_NAME}
+      </title>
+      <meta name="description" content={blog.mdesc} />
+      <link rel="canonical" href={`${DOMAIN}/blogs/${blog.slug}`} />
+      <meta property="og:title" content={`${blog.title} | ${APP_NAME}`} />
+      <meta property="og:description" content={blog.mdesc} />
 
       <meta property="og:type" content="website" />
-      <meta property="og:url" content={`${DOMAIN}/blogs/${router.pathname}`} />
+      <meta property="og:url" content={`${DOMAIN}/blogs/${blog.slug}`} />
       <meta property="og:site_name" content={`${APP_NAME}`} />
 
       <meta
@@ -55,8 +66,19 @@ const SingleBlog = ({ blog }) => {
       </Link>
     ));
 
+  const showRelatedBlog = () => {
+    return related.map((blog, i) => (
+      <div className="col-md-4">
+        <article key={i}>
+          <SmallCard blog={blog} />
+        </article>
+      </div>
+    ));
+  };
+
   return (
     <>
+      {head()}
       <Layout>
         <main>
           <article>
@@ -71,18 +93,20 @@ const SingleBlog = ({ blog }) => {
                 </div>
               </section>
               <section>
-                <h1 className="display-2 pb-3 pt-3 text-center font-weight-bold">
-                  {blog.title}
-                </h1>
-                <p className="lead pt-1 pb-1 mark">
-                  Written By {blog.postedBy.name} | Published{" "}
-                  {moment(blog.updatedAt).fromNow()}
-                </p>
-                <div className="pb-3">
-                  {showBlogCategories(blog)}
-                  {showBlogTags(blog)}
-                  <br />
-                  <br />
+                <div className="container">
+                  <h1 className="display-2 pb-3 pt-3 text-center font-weight-bold">
+                    {blog.title}
+                  </h1>
+                  <p className="lead pt-1 pb-1 mark">
+                    Written By {blog.postedBy.name} | Published{" "}
+                    {moment(blog.updatedAt).fromNow()}
+                  </p>
+                  <div className="pb-3">
+                    {showBlogCategories(blog)}
+                    {showBlogTags(blog)}
+                    <br />
+                    <br />
+                  </div>
                 </div>
               </section>
             </div>
@@ -94,7 +118,7 @@ const SingleBlog = ({ blog }) => {
             <div className="container pb-5">
               <h4 className="text-center pt-5 pb-5 h2">Related blogs</h4>
               <hr />
-              <p>Show related blogs</p>
+              <div className="row">{showRelatedBlog()}</div>
             </div>
             <div className="container pb-5">
               <p>Show Comments</p>
