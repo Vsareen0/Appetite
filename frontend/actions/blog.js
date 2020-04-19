@@ -14,13 +14,30 @@ export const create = (blog, token) => {
     .catch((err) => err);
 };
 
-export const listBlogsWithCategoriesAndTags = (blog, token) => {
+export const listBlogsWithCategoriesAndTags = (skip, limit) => {
+  const data = {
+    limit, skip
+  }
   return fetch(`${API}/blogs-categories-tags`, {
     method: "POST",
     headers: {
-      Accept: "application/json"
-    }
+      Accept: "application/json",
+      'Content-Type': "application/json",
+    },
+    body: JSON.stringify(data)
   })
     .then((response) => response.json())
     .catch((err) => err);
+};
+
+export const singleBlog = slug => {
+  return fetch(`${API}/blog/${slug}`, {
+    method: 'GET'
+  })
+  .then(data => {
+    return data.json();
+  })
+  .catch(err => {
+    console.log(err);
+  })
 };
