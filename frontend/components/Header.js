@@ -4,6 +4,7 @@ import Link from "next/link";
 import { signout, isAuth } from "../actions/auth";
 import Router from "next/router";
 import NProgress from "nprogress";
+import Search from "../components/blog/Search";
 
 import {
   Collapse,
@@ -26,7 +27,7 @@ const Header = () => {
   const toggle = () => setIsOpen(!isOpen);
 
   return (
-    <div>
+    <>
       <Navbar color="light" light expand="md">
         <Link href="/">
           <NavLink className="font-weight-bold">{APP_NAME}</NavLink>
@@ -82,7 +83,8 @@ const Header = () => {
           </Nav>
         </Collapse>
       </Navbar>
-    </div>
+      <Search />
+    </>
   );
 };
 
