@@ -58,3 +58,42 @@ export const listRelated = blog => {
     console.log(err);
   })
 };
+
+export const list = () => {
+  return fetch(`${API}/blogs`, {
+    method: 'GET'
+  })
+  .then(data => {
+    return data.json();
+  })
+  .catch(err => {
+    console.log(err);
+  })
+};
+
+
+export const removeBlog = (slug, token) => {
+  return fetch(`${API}/blog/${slug}`, {
+    method: "DELETE",
+    headers: {
+      Accept: "application/json",
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json' 
+    }
+  })
+    .then((response) => response.json())
+    .catch((err) => err);
+};
+
+export const updateBlog = (blog, token, slug) => {
+  return fetch(`${API}/blog/${slug}`, {
+    method: "PUT",
+    headers: {
+      Accept: "application/json",
+      Authorization: `Bearer ${token}`
+    },
+    body: blog
+  })
+    .then((response) => response.json())
+    .catch((err) => err);
+};
