@@ -8,7 +8,6 @@ const uniqueMessage = error => {
     } catch(ex) {
         output = 'Unique field already exists';
     }
-
     return output;
 }
 
