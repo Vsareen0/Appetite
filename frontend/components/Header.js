@@ -80,6 +80,14 @@ const Header = () => {
                 </NavLink>
               </NavItem>
             )}
+
+            {isAuth() && (
+              <NavItem>
+                <Link href="/user/crud/blog">
+                  <NavLink className="btn btn-primary text-light">Write a Blog</NavLink>
+                </Link>
+              </NavItem>
+            )}
           </Nav>
         </Collapse>
       </Navbar>
