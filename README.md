@@ -7,19 +7,19 @@ A multi user blogging platform creating using MERN Stack
 ## Technical Specifications:
 
 ### Use cases
-- [] User Signup and Sign In
+- [x] User Signup and Sign In
 - [] Account Activation (Verify by link in email) 
 - [] Forgot and reset password
 - [] Social Login with Google
-- [] JWT Based authentication and authorization
-- [] Role based login [author, admin]
-- [] Advanced CRUD Operations with image upload
-- [] Blog Search 
-- [] Adding categories tag for blogs
-- [] User public profile page
-- [] User private dashboard
+- [x] JWT Based authentication and authorization
+- [x] Role based login [author, admin]
+- [x] Advanced CRUD Operations with image upload
+- [x] Blog Search 
+- [x] Adding categories tag for blogs
+- [x] User public profile page
+- [x] User private dashboard
 - [] Contact Form
-- [] Disqus commenting system
+- [x] Disqus commenting system
 - [] Sending email with sendgrid 
 
 ### Front-end technologies:
