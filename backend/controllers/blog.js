@@ -88,7 +88,7 @@ exports.list = (req, res) => {
     .populate("tags", "_id name slug")
     .populate("postedBy", "_id name username")
     .select(
-      "_id title slug excerpt categories tags postedBy createdBy updatedBy"
+      "_id title slug excerpt categories tags postedBy createdAt updatedAt"
     )
     .exec((err, data) => {
       if (err) return res.status(400).json({ error: errorHandler(err) });
@@ -141,7 +141,7 @@ exports.read = (req, res) => {
     .populate("tags", "_id name slug")
     .populate("postedBy", "_id name username profile")
     .select(
-      "_id title slug body mtitle mdesc categories tags postedBy createdBy updatedBy"
+      "_id title slug body mtitle mdesc categories tags postedBy createdAt updatedAt"
     )
     .exec((err, data) => {
       if (err) return res.status(400).json({ error: errorHandler(err) });
@@ -222,7 +222,7 @@ exports.listRelated = (req, res) => {
 
   Blog.find({ _id: { $ne: _id }, categories: { $in: categories } })
     .limit(limit)
-    .populate("postedBy", "_id name profile")
+    .populate("postedBy", "_id name username profile")
     .select("title slug excerpt postedBy createdAt updatedAt")
     .exec((err, blogs) => {
       if (err) return res.status(400).json({ error: "Blogs not found" });
