@@ -1,7 +1,7 @@
 import fetch from "isomorphic-fetch";
 import { API } from "../config";
 import queryString from "querystring";
-import { isAuth } from "./auth";
+import { isAuth, handleResponse } from "./auth";
 
 export const create = (blog, token) => {
   let createEndPoint;
@@ -19,7 +19,10 @@ export const create = (blog, token) => {
     },
     body: blog,
   })
-    .then((response) => response.json())
+    .then((response) => {
+      handleResponse(response);
+      return response.json();
+    })
     .catch((err) => err);
 };
 
@@ -104,7 +107,10 @@ export const removeBlog = (slug, token) => {
       "Content-Type": "application/json",
     },
   })
-    .then((response) => response.json())
+    .then((response) => {
+      handleResponse(response);
+      return response.json();
+    })
     .catch((err) => err);
 };
 
@@ -124,13 +130,16 @@ export const updateBlog = (blog, token, slug) => {
     },
     body: blog,
   })
-    .then((response) => response.json())
+    .then((response) => {
+      handleResponse(response);
+      return response.json();
+    })
     .catch((err) => err);
 };
 
 export const listSearch = (params) => {
   let query = queryString.stringify(params);
-  console.log("q: ", query);
+  // console.log("q: ", query);
   return fetch(`${API}/blogs/search?${query}`, {
     method: "GET",
   })

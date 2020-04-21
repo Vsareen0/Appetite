@@ -20,7 +20,10 @@ export const getProfile = token => {
       Authorization: `Bearer ${token}`
     }
   })
-    .then((response) => response.json())
+    .then((response) => {
+      handleResponse(response);
+      return response.json();
+    })
     .catch((err) => err);
 };
 
@@ -33,6 +36,9 @@ export const update = (token, user) => {
     },
     body: user
   })
-    .then((response) => response.json())
+    .then((response) => {
+      handleResponse(response);
+      return response.json();
+    })
     .catch((err) => err);
 };
