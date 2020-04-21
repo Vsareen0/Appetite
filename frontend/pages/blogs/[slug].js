@@ -7,6 +7,7 @@ import { API, DOMAIN, APP_NAME, FB_APP_ID } from "../../config";
 import moment from "moment";
 import { useEffect, useState } from "react";
 import SmallCard from "../../components/blog/SmallCard";
+import DisqusThread  from "../../components/DisqusThread";
 
 const SingleBlog = ({ blog, query }) => {
   const [related, setRelated] = useState([]);
@@ -76,6 +77,14 @@ const SingleBlog = ({ blog, query }) => {
     ));
   };
 
+  const showComments = () => {
+    return(
+      <div>
+        <DisqusThread id={blog.id} title={blog.title} path={`/blog/${blog.slug}`} />
+      </div>
+    )
+  };
+
   return (
     <>
       {head()}
@@ -124,7 +133,7 @@ const SingleBlog = ({ blog, query }) => {
               <div className="row">{showRelatedBlog()}</div>
             </div>
             <div className="container pb-5">
-              <p>Show Comments</p>
+              {showComments()}
             </div>
           </article>
         </main>
