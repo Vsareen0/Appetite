@@ -6,7 +6,7 @@ import { singleBlog, listRelated } from "../../actions/blog";
 import { API, DOMAIN, APP_NAME, FB_APP_ID } from "../../config";
 import moment from "moment";
 import { useEffect, useState } from "react";
-import SmallCard from '../../components/blog/SmallCard';
+import SmallCard from "../../components/blog/SmallCard";
 
 const SingleBlog = ({ blog, query }) => {
   const [related, setRelated] = useState([]);
@@ -98,8 +98,11 @@ const SingleBlog = ({ blog, query }) => {
                     {blog.title}
                   </h1>
                   <p className="lead pt-1 pb-1 mark">
-                    Written By {blog.postedBy.name} | Published{" "}
-                    {moment(blog.updatedAt).fromNow()}
+                    Written by
+                    <Link href={`/profile/${blog.postedBy.username}`}>
+                      <a> {blog.postedBy.username} </a>
+                    </Link>
+                    | Published {moment(blog.updatedAt).fromNow()}
                   </p>
                   <div className="pb-3">
                     {showBlogCategories(blog)}
