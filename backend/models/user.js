@@ -34,7 +34,8 @@ var userSchema = new Schema({
     },
     salt: String,
     about: {
-        type: String
+        type: String,
+        default: ""
     },
     role: {
         type: String,

@@ -43,6 +43,7 @@ const authRoute = require('./routes/auth');
 const userRoute = require('./routes/user');
 const categoryRoute = require('./routes/category');
 const tagRoute = require('./routes/tag');
+const formRoute = require('./routes/form');
 
 // Setup Routes
 app.use('/api', blogRoute);
@@ -50,6 +51,7 @@ app.use('/api', authRoute);
 app.use('/api', userRoute);
 app.use('/api', categoryRoute);
 app.use('/api', tagRoute);
+app.use('/api', formRoute);
 
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => {
