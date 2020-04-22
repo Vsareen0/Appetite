@@ -1,5 +1,6 @@
 import fetch from "isomorphic-fetch";
 import { API } from "../config";
+const { handleResponse } = require("../actions/auth");
 
 export const userPublicProfile = username => {
   return fetch(`${API}/user/${username}`, {
