@@ -8,9 +8,7 @@ A multi user blogging platform creating using MERN Stack
 
 ### Use cases
 - [x] User Signup and Sign In
-~~ - [] Account Activation (Verify by link in email) ~~
 - [x] Forgot and reset password
-~~ - [] Social Login with Google ~~
 - [x] JWT Based authentication and authorization
 - [x] Role based login [author, admin]
 - [x] Advanced CRUD Operations with image upload
@@ -21,6 +19,12 @@ A multi user blogging platform creating using MERN Stack
 - [x] Contact Form
 - [x] Disqus commenting system
 - [x] Sending email with nodemailer 
+
+Not Implemented Yet / But planning soon.
+
+~~Account Activation (Verify by link in email)~~
+~~Social Login with Google~~
+
 
 ### Front-end technologies:
 - React
