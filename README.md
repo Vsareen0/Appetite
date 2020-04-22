@@ -18,9 +18,9 @@ A multi user blogging platform creating using MERN Stack
 - [x] Adding categories tag for blogs
 - [x] User public profile page
 - [x] User private dashboard
-- [] Contact Form
+- [x] Contact Form
 - [x] Disqus commenting system
-- [] Sending email with sendgrid 
+- [x] Sending email with nodemailer 
 
 ### Front-end technologies:
 - React
