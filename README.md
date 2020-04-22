@@ -8,9 +8,9 @@ A multi user blogging platform creating using MERN Stack
 
 ### Use cases
 - [x] User Signup and Sign In
-- [] Account Activation (Verify by link in email) 
+~~ - [] Account Activation (Verify by link in email) ~~
 - [x] Forgot and reset password
-- [] Social Login with Google
+~~ - [] Social Login with Google ~~
 - [x] JWT Based authentication and authorization
 - [x] Role based login [author, admin]
 - [x] Advanced CRUD Operations with image upload
